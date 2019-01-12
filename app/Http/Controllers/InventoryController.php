@@ -9,7 +9,7 @@ use App\Inventory;
 class InventoryController extends Controller
 {
     public function index(){
-        $inventory = Inventory::with('product')->orderBy('id','ASC')->get();
+        $inventory = Inventory::with('product.mix.product')->orderBy('id','ASC')->get();
         $categories = Category::all();
         return view('app.products.inventory')
                 ->with('inventory',$inventory)

@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Product;
 use App\Inventory;
+use App\Formula;
 
 class ProductsTableSeeder extends Seeder
 {
@@ -196,6 +197,24 @@ class ProductsTableSeeder extends Seeder
 			'Kg_L' => 1000,
 			'stock_min' => '300',
 		]);
+
+		Formula::create([
+			'product_id' => 12,
+			'materia_prima' => 8,
+		]);
+		Formula::create([
+			'product_id' => 12,
+			'materia_prima' => 9,
+		]);
+		Formula::create([
+			'product_id' => 12,
+			'materia_prima' => 10,
+		]);
+		Formula::create([
+			'product_id' => 12,
+			'materia_prima' => 11,
+		]);
+
 
 	}
 }

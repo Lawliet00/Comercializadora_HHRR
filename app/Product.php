@@ -20,4 +20,8 @@ class Product extends Model
     public function inventory(){
     	return $this->hasOne(Inventory::class);
     }
+    public function mix(){
+        return $this->hasMany(Formula::class);
+    }
+
 }

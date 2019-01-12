@@ -35542,6 +35542,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 //local registration
@@ -35557,12 +35577,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			allMateria_prima: [],
 			allEmpaquetado: [],
 			allProduction: [],
+			allMateriaProducida: [],
 			selected_Materia_prima: null,
+			selected_Materia_res: null,
 			materiales: [],
 			toUpdate: [],
 
 			// variables de input type"number"
-			qty_materiaPrima: []
+			qty_materiaPrima: [],
+			resultado: 0
 		};
 	},
 
@@ -35576,19 +35599,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	watch: {
-		selected_Materia_prima: function selected_Materia_prima(res) {
-			if (res != null) {
-				this.materiales.push(res);
-				this.qty_materiaPrima.push(0);
-				this.selected_Materia_prima = null;
-				console.log(res);
+		selected_Materia_res: function selected_Materia_res(res) {
+			var products = res.product.mix;
+
+			for (var pos in products) {
+				for (var i in this.inventory) {
+					if (this.inventory[i].product.id == products[pos].materia_prima) {
+						this.materiales.push(this.inventory[i]);
+						this.qty_materiaPrima.push(0);
+						break;
+					}
+				}
 			}
+		},
+		qty_materiaPrima: function qty_materiaPrima(res) {
+			// console.log(res)
+			// var info = res;
+			// var porcentage = 0.025
+
+			// info[2] = (porcentage * (parseFloat(info[0])+parseFloat(info[1])) ) * 10000;
+			// info[2] = parseFloat(info[2]);
+			// // info[2] = info[2].toFixed(2);
+			// console.log(info[2])
 		}
 	},
 	methods: {
 		CalculateMatterPrimeToProduct: function CalculateMatterPrimeToProduct() {
 
 			return true;
+		},
+		numeroAleatorio: function numeroAleatorio() {
+			return parseFloat((Math.random() * (5 - 1) + 1).toFixed(2));
 		},
 		RemoveProd: function RemoveProd(elem) {
 			this.materiales.splice(elem, 1);
@@ -35599,11 +35640,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		filter_product: function filter_product(inventory) {
 			for (var i = 0; i < inventory.length; i++) {
 				if (inventory[i].product.category_id == 1) {
-					this.allMateria_prima.push(inventory[i]);
+					// this.allMateria_prima.push(inventory[i]);
+					// this.materiales.push(inventory[i]);
+					// this.qty_materiaPrima.push(0);
+					// console.log(inventory[i])
 				} else if (inventory[i].product.category_id == 2) {
 					this.allEmpaquetado.push(inventory[i]);
 				} else if (inventory[i].product.category_id == 3) {
 					this.allProduction.push(inventory[i]);
+				} else if (inventory[i].product.category_id == 4) {
+					this.allMateriaProducida.push(inventory[i]);
 				}
 			}
 		}
@@ -36147,18 +36193,20 @@ var render = function() {
               }
             },
             [
+              _c("br"),
+              _vm._v(" "),
               _c("form", [
                 _c("div", { staticClass: "form-group" }, [
                   _c(
                     "label",
                     {
                       staticClass: "control-label col-md-3 col-sm-3 col-xs-12",
-                      staticStyle: { "margin-top": "-10px" }
+                      staticStyle: { "margin-top": "0px" }
                     },
-                    [_vm._v("Selecciona los productos bases\n\t\t\t\t\t\t")]
+                    [_vm._v("Selecciona La materia a producir\n\t\t\t\t\t\t")]
                   ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6 col-sm-6 col-xs-12" }, [
+                  _c("div", { staticClass: "col-md-9 col-sm-9 col-xs-12" }, [
                     _c(
                       "select",
                       {
@@ -36166,8 +36214,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.selected_Materia_prima,
-                            expression: "selected_Materia_prima"
+                            value: _vm.selected_Materia_res,
+                            expression: "selected_Materia_res"
                           }
                         ],
                         staticClass: "form-control col-md-7 col-xs-12",
@@ -36181,22 +36229,18 @@ var render = function() {
                                 var val = "_value" in o ? o._value : o.value
                                 return val
                               })
-                            _vm.selected_Materia_prima = $event.target.multiple
+                            _vm.selected_Materia_res = $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
                           }
                         }
                       },
                       [
-                        _vm.allMateria_prima.length != _vm.materiales.length
-                          ? _c("option", { attrs: { disabled: "" } }, [
-                              _vm._v("Seleccione una opción")
-                            ])
-                          : _c("option", { attrs: { disabled: "" } }, [
-                              _vm._v("No quedan productos por agregar")
-                            ]),
+                        _c("option", { attrs: { disabled: "" } }, [
+                          _vm._v("Seleccione una opción")
+                        ]),
                         _vm._v(" "),
-                        _vm._l(_vm.allMateria_prima, function(prod) {
+                        _vm._l(_vm.allMateriaProducida, function(prod) {
                           return _vm.materiales.indexOf(prod) == -1
                             ? _c("option", { domProps: { value: prod } }, [
                                 _c("span", [
@@ -36218,13 +36262,16 @@ var render = function() {
               _vm._v(" "),
               _c("br"),
               _c("br"),
+              _c("br"),
               _vm._v(" "),
               _vm.materiales.length > 0
                 ? _c("table", { staticClass: "table table-responsive" }, [
                     _c("thead", [
-                      _c("th"),
-                      _vm._v(" "),
-                      _c("th", [_vm._v("Materias Primas")]),
+                      _c("th", [
+                        _c("h4", [
+                          _c("strong", [_vm._v("Materias necesarias")])
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c("th")
                     ]),
@@ -36232,91 +36279,96 @@ var render = function() {
                     _c(
                       "tbody",
                       _vm._l(_vm.materiales, function(info) {
-                        return _c("tr", { staticClass: "row" }, [
-                          _c("td", [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-danger",
-                                on: {
-                                  click: function($event) {
-                                    _vm.RemoveProd(info)
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "fa fa-trash" })]
-                            )
-                          ]),
-                          _vm._v(" "),
+                        return _c("tr", [
                           _c("td", [
                             _c("strong", [_vm._v(_vm._s(info.product.name))])
                           ]),
                           _vm._v(" "),
                           _c("td", [
-                            _c(
-                              "div",
-                              { staticClass: "col-md-6 col-sm-6 col-xs-6" },
-                              [
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value:
-                                        _vm.qty_materiaPrima[
-                                          _vm.materiales.indexOf(info)
-                                        ],
-                                      expression:
-                                        "qty_materiaPrima[materiales.indexOf(info)]"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  attrs: { type: "number", required: "" },
-                                  domProps: {
+                            _c("div", [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
                                     value:
                                       _vm.qty_materiaPrima[
                                         _vm.materiales.indexOf(info)
-                                      ]
-                                  },
-                                  on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.qty_materiaPrima,
-                                        _vm.materiales.indexOf(info),
-                                        $event.target.value
-                                      )
-                                    }
+                                      ],
+                                    expression:
+                                      "qty_materiaPrima[materiales.indexOf(info)]"
                                   }
-                                })
-                              ]
-                            ),
-                            info.type_stock_min == "Kg_L"
-                              ? _c("span", [
-                                  _c("strong", [
-                                    _vm._v(
-                                      _vm._s(
-                                        "Disponible: " +
-                                          (info.Kg_L -
-                                            _vm.qty_materiaPrima[
-                                              _vm.materiales.indexOf(info)
-                                            ])
-                                      ) +
-                                        " " +
-                                        _vm._s(info.product.medida) +
-                                        "."
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "number", required: "" },
+                                domProps: {
+                                  value:
+                                    _vm.qty_materiaPrima[
+                                      _vm.materiales.indexOf(info)
+                                    ]
+                                },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.qty_materiaPrima,
+                                      _vm.materiales.indexOf(info),
+                                      $event.target.value
                                     )
-                                  ])
-                                ])
-                              : _vm._e()
+                                  }
+                                }
+                              })
+                            ]),
+                            _c("span", [
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    "Disponible: " +
+                                      (info.Kg_L -
+                                        _vm.qty_materiaPrima[
+                                          _vm.materiales.indexOf(info)
+                                        ])
+                                  ) +
+                                    " " +
+                                    _vm._s(info.product.medida) +
+                                    "."
+                                )
+                              ])
+                            ])
                           ])
                         ])
                       })
                     )
                   ])
-                : _vm._e()
+                : _vm._e(),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _c("strong", [_vm._v("Materia resulotante:")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.resultado,
+                      expression: "resultado"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "number" },
+                  domProps: { value: _vm.resultado },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.resultado = $event.target.value
+                    }
+                  }
+                })
+              ])
             ]
           ),
           _vm._v(" "),

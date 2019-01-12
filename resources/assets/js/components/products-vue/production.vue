@@ -7,11 +7,12 @@
 					 finishButtonText="Finalizar">
 		  <tab-content title="Etapa de Elaboración"
 		  				:before-change="CalculateMatterPrimeToProduct">
+		  				<br>
 		    	<form>
-		    		<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" style="margin-top: -10px;">Selecciona los productos bases
+		    		<!-- <div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" style="margin-top: -3px;">Selecciona los productos bases
 						</label>
-						<div class="col-md-6 col-sm-6 col-xs-12">
+						<div class="col-md-9 col-sm-9 col-xs-12">
 		                  <select class="form-control col-md-7 col-xs-12" v-model="selected_Materia_prima">
 		                  	<option disabled="" v-if="allMateria_prima.length != materiales.length">Seleccione una opción</option>
 		                  	<option disabled="" v-else>No quedan productos por agregar</option>
@@ -24,31 +25,50 @@
 		                  </select>
 		                </div>
 					</div>
+					<br><br><br> -->
+					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" style="margin-top: 0px;">Selecciona La materia a producir
+						</label>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+		                  <select class="form-control col-md-7 col-xs-12" v-model="selected_Materia_res">
+		                  	<option disabled="">Seleccione una opción</option>
+
+		                  	<option v-for="prod in allMateriaProducida" :value="prod" v-if="materiales.indexOf(prod) == -1">
+		                  		<span>
+		                  			{{ prod.product.name }}
+		                  		</span>
+		                  	</option>
+		                  </select>
+		                </div>
+					</div>
 		    	</form>
 
-				<br><br>
+				<br><br><br>
 
 				<table class="table table-responsive" v-if="materiales.length > 0">
 					<thead>
-						<th></th>
-						<th>Materias Primas</th>
+						<!-- <th></th> -->
+						<th><h4><strong>Materias necesarias</strong></h4></th>
 						<th></th>
 					</thead>
 					<tbody>
-						<tr v-for="info in materiales" class="row">
-							<td>
+						<tr v-for="info in materiales">
+							<!-- <td>
 								<button class="btn btn-danger" @click="RemoveProd(info)"><i class="fa fa-trash"></i></button>
-							</td>
+							</td> -->
 							<td><strong>{{ info.product.name }}</strong></td>
 							<td>
-								<div class="col-md-6 col-sm-6 col-xs-6">
+								<div>
 									<input type="number" class="form-control" required="" v-model="qty_materiaPrima[materiales.indexOf(info)]">
-								</div><span v-if="info.type_stock_min == 'Kg_L'"><strong>{{ 'Disponible: '+(info.Kg_L-qty_materiaPrima[materiales.indexOf(info)]) }} {{ info.product.medida }}.</strong></span>
+								</div><span><strong>{{ 'Disponible: '+(info.Kg_L-qty_materiaPrima[materiales.indexOf(info)]) }} {{ info.product.medida }}.</strong></span>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 
+			<label class="control-label"><strong>Materia resulotante:</strong> 
+				<input type="number" v-model="resultado" class="form-control">
+			</label>
 				
 
 		  </tab-content>
@@ -93,12 +113,15 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 				allMateria_prima:[],
 				allEmpaquetado:[],
 				allProduction:[],
+				allMateriaProducida:[],
 				selected_Materia_prima:null,
+				selected_Materia_res:null,
 				materiales:[],
 				toUpdate:[],
 
 				// variables de input type"number"
 				qty_materiaPrima:[],
+				resultado:0,
 			}
 		},
 		components: {
@@ -110,20 +133,38 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 			this.filter_product(this.inventory);
 		},
 		watch:{
-			selected_Materia_prima:function(res){
-				if (res != null) {
-					this.materiales.push(res);
-					this.qty_materiaPrima.push(0);
-					this.selected_Materia_prima = null;
-					console.log(res);
+			selected_Materia_res:function(res){
+				var products = res.product.mix;
+				
+				for (var pos in products) {
+					for (var i in this.inventory) {
+						if (this.inventory[i].product.id == products[pos].materia_prima) {
+							this.materiales.push(this.inventory[i]);
+							this.qty_materiaPrima.push(0);
+							break;
+						}
+					}
 				}
 			},
+			qty_materiaPrima: function(res){
+				// console.log(res)
+				// var info = res;
+				// var porcentage = 0.025
+
+				// info[2] = (porcentage * (parseFloat(info[0])+parseFloat(info[1])) ) * 10000;
+				// info[2] = parseFloat(info[2]);
+				// // info[2] = info[2].toFixed(2);
+				// console.log(info[2])
+			}
 		},
 		methods:{
 			CalculateMatterPrimeToProduct:function() {
 				
 				return true;
 		    },
+		    numeroAleatorio() {
+				return parseFloat((Math.random()*(5-1)+1).toFixed(2));
+			},
 		    RemoveProd(elem){
 		    	this.materiales.splice(elem,1);
 		    },
@@ -133,13 +174,19 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 			filter_product(inventory){
 				for (var i = 0; i < inventory.length; i++) {
 					if (inventory[i].product.category_id == 1) {
-						this.allMateria_prima.push(inventory[i]);
+						// this.allMateria_prima.push(inventory[i]);
+						// this.materiales.push(inventory[i]);
+						// this.qty_materiaPrima.push(0);
+						// console.log(inventory[i])
 					}
 					else if (inventory[i].product.category_id == 2) {
 						this.allEmpaquetado.push(inventory[i]);	
 					}
 					else if (inventory[i].product.category_id == 3) {
 						this.allProduction.push(inventory[i]);
+					}
+					else if (inventory[i].product.category_id == 4) {
+						this.allMateriaProducida.push(inventory[i]);
 					}
 				}
 			}
