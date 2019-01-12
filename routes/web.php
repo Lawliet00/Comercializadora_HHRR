@@ -31,6 +31,7 @@ Route::group(['prefix' => 'inventory'],function(){
 	Route::get('get_all_products','InventoryController@get_all_products');
 	Route::get('','InventoryController@index');
 	Route::post('update','InventoryController@update');
+	Route::post('AddToProd','InventoryController@AddToProd');
 });
 
 Route::group(['prefix' => 'client'],function(){

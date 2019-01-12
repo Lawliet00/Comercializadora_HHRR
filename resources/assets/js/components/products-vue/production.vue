@@ -63,12 +63,18 @@
 								</div><span><strong>{{ 'Disponible: '+(info.Kg_L-qty_materiaPrima[materiales.indexOf(info)]) }} {{ info.product.medida }}.</strong></span>
 							</td>
 						</tr>
+						<tr>
+							<td>
+								<label class="control-label"><strong>Materia resultante:</strong>
+								</label>
+							</td>
+							<td>
+								<input type="number" v-model="resultado" class="form-control">
+							</td>
+						</tr>
 					</tbody>
 				</table>
 
-			<label class="control-label"><strong>Materia resulotante:</strong> 
-				<input type="number" v-model="resultado" class="form-control">
-			</label>
 				
 
 		  </tab-content>
@@ -148,22 +154,42 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 			},
 			qty_materiaPrima: function(res){
 				// console.log(res)
-				// var info = res;
-				// var porcentage = 0.025
-
-				// info[2] = (porcentage * (parseFloat(info[0])+parseFloat(info[1])) ) * 10000;
-				// info[2] = parseFloat(info[2]);
-				// // info[2] = info[2].toFixed(2);
-				// console.log(info[2])
+				var info = res;
+				var cal = (parseFloat(info[0])+parseFloat(info[1])+parseFloat(info[2])+parseFloat(info[3]));
+				var a = cal*(this.numeroAleatorio()/100);
+				this.resultado = (cal - a).toFixed(2);
 			}
 		},
 		methods:{
 			CalculateMatterPrimeToProduct:function() {
-				
+				var inventory_f = [];
+
+				inventory_f.push({
+					'id':this.selected_Materia_res.product.id,
+					'medida':this.selected_Materia_res.product.medida,
+					'quantity':(this.selected_Materia_res.product.medida == 'Unidades')?parseInt(this.resultado):null,
+					'Kg_L':(this.selected_Materia_res.product.medida == 'Unidades')?null:parseFloat(this.resultado)
+				});
+				for (var i in this.materiales) {
+					inventory_f.push({
+						'id':this.materiales[i].product.id,
+						'medida':this.materiales[i].product.medida,
+						'quantity':(this.selected_Materia_res.product.medida == 'Unidades')?parseInt(this.qty_materiaPrima[i]):null,
+						'Kg_L':(this.selected_Materia_res.product.medida == 'Unidades')?null:parseFloat(this.qty_materiaPrima[i])
+					});
+				}
+				console.log("INVEN")
+				console.log(inventory_f)
+				axios.post('/inventory/AddToProd',{'inventory':inventory_f}).then(response=>{
+					// this.product_list = response.data.allInventory;
+					console.log(response.data)
+					alert('Actualización Aplicada');
+				});
 				return true;
 		    },
 		    numeroAleatorio() {
-				return parseFloat((Math.random()*(5-1)+1).toFixed(2));
+		    	// return Math.round(Math.random()*(10-1)+1);
+				return parseFloat((Math.random()*(4-1)+1).toFixed(2)); // float
 			},
 		    RemoveProd(elem){
 		    	this.materiales.splice(elem,1);
