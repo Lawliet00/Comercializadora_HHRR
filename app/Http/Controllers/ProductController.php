@@ -30,7 +30,8 @@ class ProductController extends Controller
     	$product->save();
 
         $product_inv = new Inventory();
-
+        $product_inv->product_id = $product->id;
+        $product_inv->stock_min = 100;
         // $product_inv->type_stock_min = ($product->medida != 'Unidades') ? 'Kg_L' : 'qty' ;
         $product_inv->Kg_L = 0.00;
         $product_inv->quantity = 0;

@@ -10,7 +10,7 @@ class Inventory extends Model
 
 	protected $fillable = [
 		'product_id',
-		'type_stock_min',
+		// 'type_stock_min',
 		'quantity',
 		'Kg_L',
 		'stock_min',

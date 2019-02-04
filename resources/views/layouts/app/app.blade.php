@@ -55,13 +55,19 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
 
-                  <li><a href="/product"><i class="fa fa-list"></i> Lista de Productos</a>
+                  <li><a href="/product"><i class="fa fa-list"></i>Productos</a>
                   </li>
 
-                  <li><a href="/client"><i class="fa fa-list-ul"></i> Lista de Clientes</a>
+                  <li><a href="/client"><i class="fa fa-list-ul"></i>Clientes</a>
                   </li>
 
-                  <li><a href="/inventory"><i class="fa fa-list"></i> Inventario</a>
+                  <li><a href="/inventory"><i class="fa fa-list"></i>Inventario</a>
+                  </li>
+
+                  <li><a href="/orders/invoices"><i class="fa fa-list"></i>Facturación</a>
+                  </li>
+
+                  <li><a href="#"><i class="fa fa-list"></i>Ordenes</a>
                   </li>
                 </ul>
               </div>
@@ -264,7 +270,6 @@
     <script src="{{ URL::asset('/Gentelella/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- NProgress -->
     <script src="{{ URL::asset('/Gentelella/vendors/nprogress/nprogress.js') }}"></script>
-    
     <!-- Custom Theme Scripts -->
     <script src="{{ URL::asset('/Gentelella/build/js/custom.min.js') }}"></script>
     <script src="{{ URL::asset('js/app.js') }}"></script>

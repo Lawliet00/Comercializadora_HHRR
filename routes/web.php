@@ -28,10 +28,15 @@ Route::group(['prefix' => 'product'],function(){
 });
 
 Route::group(['prefix' => 'inventory'],function(){
-	Route::get('get_all_products','InventoryController@get_all_products');
 	Route::get('','InventoryController@index');
+	Route::get('get_all_products','InventoryController@get_all_products');
 	Route::post('update','InventoryController@update');
 	Route::post('AddToProd','InventoryController@AddToProd');
+});
+
+Route::group(['prefix' => 'orders'],function(){
+	Route::get('invoices','OrderController@indexInvoices');
+	Route::post('RemoveInInventory','OrderController@RemoveInInventory');
 });
 
 Route::group(['prefix' => 'client'],function(){

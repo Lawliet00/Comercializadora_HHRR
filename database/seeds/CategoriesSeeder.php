@@ -12,16 +12,19 @@ class CategoriesSeeder extends Seeder
     public function run()
     {
         Category::create([
-			'name' => 'Materia Prima',
+			'name' => 'Materiales base/utilizados',
 		]);
-		Category::create([
-			'name' => 'Empaquetado',
-		]);
-		Category::create([
-			'name' => 'Producto Terminado',
-		]);
+        // Category::create([
+        //  'name' => 'Producto Terminado',
+        // ]);
         Category::create([
             'name' => 'Materia Producida',
         ]);
+		Category::create([
+			'name' => 'Empaquetado',
+		]);
+        // Category::create([
+        //     'name' => 'Otros',
+        // ]);
     }
 }

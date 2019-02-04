@@ -5,8 +5,11 @@
 					<h2>Inventario</h2>
 					<div class="align-right btn-toolbar">
 						<div class="btn-group">
-							<button class="btn btn-dark" @click="getModal()">
+							<button class="btn btn-dark" @click="getModal('ModalProductionProcess')">
 							  Proceso de producción
+							</button>
+							<button class="btn btn-dark" @click="getModal('ModalEmpaquetado')">
+							  Empaquetado
 							</button>
 						</div>
 					</div>
@@ -21,42 +24,30 @@
 					        <h5 class="modal-title" id="exampleModalLabel">Proceso de Producción</h5>
 					      </div>
 					      <div class="modal-body">
-					      	<!-- <div v-if="VarProcessProdcuction"> -->
 					      		<div v-if="product_list.length != 0">
-					        		<production :inventory="product_list" :categories="categories"></production>
+					        		<production :inventory="product_list" :categories="categories" :formulario="'produccion'"></production>
 					      		</div>
-					      	<!-- </div> -->
-					      </div>
-					      <div class="modal-footer">
-					        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal()">Close</button>
-					        <button type="button" class="btn btn-primary">Save changes</button>
 					      </div>
 					    </div>
 					  </div>
 					</div>
-<!-- 					<vue-good-table
-                      :columns="getColumns()"
-                      :rows="product_list"
-					  :search-options="{
-					    enabled: true,
-					    trigger: 'enter'
-					  }"
-                      :pagination-options="{
-					    enabled: true,
-					    mode: 'records'
-					  }"
-                      theme="black-rhino">
-                        <template slot="table-row" slot-scope="props">
-                          <span> <img :src="props.row.product.image" alt="" width="50px" height="50px"></span>
-                          
-                          <span>{{ props.row.product.name }}</span>
 
-                          <span>
-                            <button class="btn btn-danger btn-sm" data-toggle="tooltip" title="Remove Garment"><i class="fa fa-trash-o"></i></button>
-                          </span>
-						</template>
-                    </vue-good-table>
- -->
+					<div class="modal fade" id="ModalEmpaquetado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">Actualizar Inventario de Producto</h5>
+					      </div>
+					      <div class="modal-body">
+								<div v-if="product_list.length != 0">
+					        		<production :inventory="product_list" :categories="categories" :formulario="'empaquetado'"></production>
+					      		</div>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+
+
 					<!-- TABLA DE TODOS LOS PRODUCTOS -->
 					<table id="datatable" class="table table-striped table-bordered" v-if="product_list.length != 0">
 						<thead>
@@ -184,6 +175,7 @@
 										<button class="btn btn-success" type="button" @click="UpdateProduct(inventory_f, false)" v-if="update_info && toUpdate.id == inventory_f.id">Aplicar</button>
 
 										<button class="btn btn-info" type="button" @click="UpdateProduct(inventory_f, true)" v-else>Actualizar</button>
+
 									</div>
 								</td>
 							</tr>
@@ -201,7 +193,6 @@
 		data(){
 			return{
 				update_info:false,
-				VarProcessProdcuction:false,
 				product_list:[],
 				toUpdate:[],
 				getColumns(){
@@ -235,12 +226,8 @@
 					// this.view = 'table_products';
 				});
 			},
-			getModal(){
-				$('#ModalProductionProcess').modal('toggle');
-				this.VarProcessProdcuction = true;
-			},
-			closeModal(){
-				this.VarProcessProdcuction = false;
+			getModal(modal){
+				$('#'+modal).modal('toggle');
 			},
 			CalcularUnidadBultos(qty, qty_for_box){  // transforma de unidades a bultos
 				var sueltos = qty, bultos = 0;
@@ -252,6 +239,8 @@
 				return (bultos+' bultos - sueltos: '+sueltos);
 			},
 			UpdateProduct(inventory_f, change){
+				// $('ModalUpdatedProd').modal('toggle');
+				// return 
 				this.update_info = change;
 				this.toUpdate = inventory_f;
 
@@ -267,6 +256,7 @@
 													'Kg_L':inventory_f.Kg_L,
 													'stock_min':inventory_f.stock_min
 													}).then(response=>{
+						this.product_list = []
 						this.product_list = response.data.allInventory;
 						alert('Actualización Aplicada');
 					});

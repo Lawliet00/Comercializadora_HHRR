@@ -3,20 +3,17 @@
 		<div>
 			<div class="x_panel">
 				<div class="x_title">
-					<h2 v-if="view == 'table_clients'">Lista de Clientes</h2>
-					<h2 v-else-if="view == 'form_newClient' && !update_form">Formulario de nuevos clientes</h2>
-					<h2 v-else>Formulario de actualización de clientes</h2>
+					<h2>Lista de Clientes</h2>
 					<div>
 						<div class="align-right btn-toolbar">
 							<div class="btn-group">
-								<button class="btn btn-dark" type="button" v-on:click="change_view('table_clients')">Tabla de Clientes</button>
 								<button class="btn btn-dark" type="button" v-on:click="change_view('form_newClient')">Agregar Nuevo Cliente</button>
 							</div>
 						</div>
 					</div>
 					<div class="clearfix"></div>
 				</div>
-				<div class="x_content table-responsive" v-if="view == 'table_clients'">
+				<div class="x_content table-responsive">
 					<!-- TABLA DE TODOS LOS PRODUCTOS -->
                 	<table id="datatable" class="table table-striped table-bordered" v-if="client_list.length != 0">
 						<thead>
@@ -52,94 +49,96 @@
 					</table>
 				</div>
 
+			</div>
+		</div>
 
-				<!-- FORMULARIO DE CREACION DE NUEVO PRODUCTO -->
-				<div v-else-if="view == 'form_newClient'">
-					<form @submit.prevent="AddOrUpdate_Product()" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+
+		<!-- MODALS -->
+
+		<div class="modal fade" id="ModalForm_newClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Formulario Nuevo Cliente</h5>
+		      </div>
+		      <div class="modal-body">
+		      	<!-- FORMULARIO DE CREACION DE NUEVO PRODUCTO -->
+		      		<form class="form-horizontal form-label-left">
 					
 
 					<!-- CODIGO RIF / CI -->
 					  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">RIF
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">RIF
                         </label>
-                        <div class="col-md-2 col-sm-2 col-xs-2">
-							<select class="form-control" v-model="type_rif" name="" id="">
-								<option value="J">J</option>
-								<option value="E">E</option>
-								<option value="X">No RIF</option>
-							</select>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-xs-10">
-							<input type="text" class="form-control" :disabled="disabledRif" v-model="var_rif">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+							<input type="text" class="form-control" data-inputmask="'mask' : 'A-9999999-9'" id="maskRIF">
                         </div>
                       </div>
 
 					<!-- Nombre del Negocio -->
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre del Negocio <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Nombre del Negocio <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" required="required" class="form-control col-md-7 col-xs-12" v-model="client.name_bussines">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <input type="text" required="required" class="form-control col-md-7 col-xs-9" v-model="client.name_bussines">
                         </div>
                       </div>
 
 						<!-- Nombre del producto -->
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Nombre del Cliente <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Nombre del Cliente <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" required="required" class="form-control col-md-7 col-xs-12" v-model="client.name">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <input type="text" required="required" class="form-control col-md-7 col-xs-9" v-model="client.name">
                         </div>
                       </div>
 
                       	<!-- Dirección -->
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Dirección <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Dirección <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" required="required" class="form-control col-md-7 col-xs-12" v-model="client.address">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <input type="text" required="required" class="form-control col-md-7 col-xs-9" v-model="client.address">
                         </div>
                       </div>
 
 					<!-- Telefono -->
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Telefono <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Telefono <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" required="required" class="form-control col-md-7 col-xs-12" v-model="client.phone">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <input type="text" required="required" class="form-control col-md-7 col-xs-9" data-inputmask="'mask' : '(9999)999-9999'" id="maskPhone">
                         </div>
                       </div>
 
 					<!-- Correo Electronico -->
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Correo Electronico <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Correo Electronico <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="email" required="required" class="form-control col-md-7 col-xs-12" v-model="client.email">
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <input type="text" required="required" class="form-control col-md-7 col-xs-9" v-model="client.email">
                         </div>
                       </div>
 
                       <!-- IVA -->
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">IVA <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">IVA <span class="required">*</span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="number" required="required" class="form-control col-md-7 col-xs-12" v-model="client.tax">
-                        </div>
-                      </div>
-
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button class="btn btn-primary" type="button" @click="change_view('table_clients')">Cancelar</button>
-						  <button class="btn btn-primary" type="reset" v-if="!update_form">Limpiar formulario</button>
-                          <button class="btn btn-success" type="submit" v-if="!update_form">Agregar</button>
-                          <button class="btn btn-success" type="submit" v-else>Actualizar</button>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <input type="number" required="required" class="form-control col-md-7 col-xs-9" v-model="client.tax">
                         </div>
                       </div>
                     </form>
+		      </div>
+				<div class="modal-footer" align="center">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+					<button class="btn btn-primary" type="button" @click="clean_form()" v-if="!update_form">Limpiar formulario</button>
+					<button class="btn btn-success" type="button" @click="AddOrUpdate_Product()" v-if="!update_form">Agregar</button>
+					<button class="btn btn-success" type="button" @click="AddOrUpdate_Product()" v-else>Actualizar</button>
 				</div>
-			</div>
+		    </div>
+		  </div>
 		</div>
 
 	</div>
@@ -154,9 +153,7 @@
 				update_form:false,  // values: true or false 
 				client_list:[],
 				update_id:'',
-				type_rif:'',
 				disabledRif:false,
-
 				var_rif:'',
 				var_phone:'',
 				client:{
@@ -174,33 +171,26 @@
 			this.get_all_clients();
 		},
 		watch:{
-			type_rif: function(res){
-				if (res == 'X') {
-					this.client.code_rif = '';
-					this.disabledRif = true;
-				}
-				else{this.disabledRif = false;}
+			var_rif: function(res){
+				this.client.code_rif = res;
+				console.log(document.getElementById('maskRIF'))
+				// if (res.length == 9) {
+				// 	var aux = this.var_rif[8];
+				// 	this.var_rif[8] = '-';
+				// 	this.var_rif[9] = '-';
+				// }else if(res.length < 7){
+				// 	console.log(this.var_rif.split('-'))
+				// 	this.var_rif = this.var_rif.split('-')[0];
+				// }else{
+				// 	console.log('ccc-'+this.var_rif.split('-'))
+				// }
 			},
-			// var_rif: function(res){
-			// 	if (res.length == 9) {
-			// 		var aux = this.var_rif[8];
-			// 		this.var_rif[8] = '-';
-			// 		this.var_rif[9] = '-';
-			// 	}else if(res.length < 7){
-			// 		console.log(this.var_rif.split('-'))
-			// 		this.var_rif = this.var_rif.split('-')[0];
-			// 	}else{
-			// 		console.log('ccc-'+this.var_rif.split('-'))
-			// 	}
-			// },
 		},
 		methods:{
 			change_view(view_select){
-				if (view_select == 'form_newClient') {
-					// this.clean_form();
-					this.update_form = false;
-				}
-				this.view = view_select
+				this.clean_form();
+				$('#ModalForm_newClient').modal('toggle');
+				this.update_form = false;
 			},
 			clean_form(){
 				this.client.code_rif = null;
@@ -210,6 +200,10 @@
 				this.client.phone = null;
 				this.client.email = null;
 				this.client.tax = 0;
+
+				document.getElementById('maskRIF').value = "";
+				document.getElementById('maskPhone').value = "";
+
 			},
 			get_all_clients(){
 				axios.get('/client/get_all_clients').then(response => {
@@ -218,34 +212,37 @@
 				});
 			},
 			AddOrUpdate_Product(){
+				this.client.code_rif = document.getElementById('maskRIF').value;
+				this.client.phone = document.getElementById('maskPhone').value;
+				console.log(this.client)
 				if (!this.update_form) {
-					if (this.type_rif != 'X') {
-						this.client.code_rif = this.type_rif+'-'+this.var_rif;
-					}
 					axios.post('/client/add_client',this.client).then(response => {
 						this.get_all_clients();
 						alert("cliente agregado correctamente");
+						this.clean_form();
 					});
 				}else{
 					axios.post('/client/update_client',this.client).then(response => {
 						this.get_all_products();
 						this.update_form = false;
-						alert("producto actualizado correctamente");
+						alert("client actualizado correctamente");
+						this.clean_form();
 					});
 				}
 			},
 			UpdateClient(client){
 				// console.log(product);
 				this.client.id = client.id;
-				this.client.code_rif = client.code_rif;
+				document.getElementById("maskRIF").value = client.code_rif;
 				this.client.name_bussines = client.name_bussines;
 				this.client.name = client.name;
 				this.client.address = client.address;
-				this.client.phone = client.phone;
+				document.getElementById("maskPhone").value = client.phone;
 				this.client.email = client.email;
 				this.client.tax = client.tax;
 				this.update_form = true;
-				this.view = 'form_newClient';
+
+				$('#ModalForm_newClient').modal('toggle');
 			},
 			DeleteClient(id){
 				axios.delete('/client/delete_client/'+id).then(response => {

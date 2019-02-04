@@ -97,7 +97,7 @@
                       </div>
 
 						<!-- Cantidad de Unidades por bulto -->
-					  <div class="form-group" v-if="product.category_id != null && product.category_id == 3">
+					  <div class="form-group" v-if="product.category_id != null && (product.category_id == 3 || product.category_id == 5)">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Cantidad de Unidades por bulto <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">

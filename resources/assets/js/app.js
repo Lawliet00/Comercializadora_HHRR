@@ -20,9 +20,13 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+// Productos e inventarios
 Vue.component('products-index', require('./components/products-vue/index.vue'));
 Vue.component('inventory', require('./components/products-vue/inventory.vue'));
 Vue.component('production', require('./components/products-vue/production.vue'));
+
+// Ordenes
+Vue.component('orders-index', require('./components/orders-vue/index.vue'));
 
 Vue.component('clients-index', require('./components/client-vue/index.vue'));
 
